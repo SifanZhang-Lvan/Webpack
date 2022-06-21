@@ -37,7 +37,9 @@ module.exports = {
     // __dirname nodejs的变量，代表当前文件的文件夹目录
     path: path.resolve(__dirname, '../dist'), // 绝对路径,表示在当前文件夹下输出名为dist的文件夹
     // 入口文件打包输出文件名
-    filename: 'static/js/main.js',
+    filename: 'static/js/[name].js',
+    // 图片字体等通过type:asset处理资源命名方式
+    assetModuleFilename: 'static/media/[hash:10][ext][query]',
     // 自动清空上次打包的内容
     // 原理：在打包前，将path整个目录内容清空，再进行打包
     clean: true
@@ -74,11 +76,11 @@ module.exports = {
                 maxSize: 5 * 1024 // 10kb
               }
             },
-            generator: {
-              // 输出图片名称
-              // [hash:10] hash值取前10位
-              filename: 'static/images/[hash:10][ext][query]'
-            }
+            // generator: {
+            //   // 输出图片名称
+            //   // [hash:10] hash值取前10位
+            //   filename: 'static/images/[hash:10][ext][query]'
+            // }
           },
           {
             test: /\.js$/,
@@ -122,7 +124,7 @@ module.exports = {
       template: path.resolve(__dirname, '../public/index.html')
     }),
     new MiniCssExtractPlugin({
-      filename: 'static/css/main.css'
+      filename: 'static/css/[name].css'
     })
     // new CssMinimizerPlugin(),
     // new TerserWebpackPlugin({
@@ -163,7 +165,12 @@ module.exports = {
       //     ]
       //   ]
       // })
-    ]
+    ],
+    // 代码分割配置
+    splitChunks: {
+      chunks: 'all',
+      // 其他使用默认值
+    }
   },
   // 模式
   mode: 'production',
